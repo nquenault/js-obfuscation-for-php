@@ -1,0 +1,4 @@
+RewriteEngine on
+
+RewriteRule (.*\.js)(\?.*)?$ js-obfuscate.php?f=$1 [END]
+RewriteRule js-obfuscate.php - [R=403,L]
