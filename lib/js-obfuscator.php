@@ -7,9 +7,9 @@ class JSObfuscator
 	public static $nodeJSObf = '../nodejs/js-obfuscator.js'; // path to nodejs obfuscator script
 	public static $cacheFolder = '/path/to/cache/'; // cache directory
 	
-	public static function clearCache($exception = '^$')
+	public static function clearCache($mask = '*', $exception = '^$') // mask isnt regex
 	{
-		foreach(glob(self::$cacheFolder.'*') as $tcache)
+		foreach(glob(self::$cacheFolder.$mask) as $tcache)
 		if(!preg_match('@'.$exception.'@', $tcache))
 		unlink($tcache);
 	}
@@ -20,7 +20,7 @@ class JSObfuscator
 		$script = null;
 
 		// clear old cache versions of $filepath
-		self::clearCache(basename($cachepath).'$');
+		self::clearCache(md5($filepath).'.*.'.basename($filepath), preg_quote(basename($cachepath), '@').'$');
 
 		if(file_exists($filepath))
 		{
